@@ -1,5 +1,4 @@
-import { UserConfig, ConfigEnv } from 'vite';
-import { Plugin } from 'vite';
+import { UserConfig, ConfigEnv, Plugin } from 'vite';
 
 export interface Options {
   /**
@@ -29,7 +28,7 @@ export interface Options {
  * @param opts 选项，包括自定义前缀。
  * @returns 返回一个Vite插件对象。
  */
-export default function createPlugin(opts: Options): Plugin {
+export default function createPlugin(opts?: Options): Plugin {
   const { prefix } = opts || {};
 
   const plugin: Plugin = {

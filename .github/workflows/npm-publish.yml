@@ -4,30 +4,45 @@
 name: Node.js Package
 
 on:
-  release:
-    types: [created]
+  push:
+    branches:
+      # 触发ci/cd的代码分支
+      - master
 
 jobs:
   build:
+    # 指定操作系统
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      # 将代码拉到虚拟机
+      - name: 获取源码 🛎️
+        uses: actions/checkout@v2
+      # 指定node版本
+      - name: Node环境版本 🗜️
+        uses: actions/setup-node@v3
         with:
           node-version: 18
-      - run: npm ci
-      - run: npm test
-
-  publish-npm:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+          registry-url: 'https://registry.npmjs.org'
+      # 依赖缓存策略
+      - name: Npm缓存 📁
+        id: cache-dependencies
+        uses: actions/cache@v3
         with:
-          node-version: 18
-          registry-url: https://registry.npmjs.org/
-      - run: npm ci
-      - run: npm publish
+          path: |
+            **/node_modules
+          key: ${{runner.OS}}-${{hashFiles('**/package-lock.json')}}
+      # 依赖下载
+      - name: 安装依赖 📦
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: npm install
+      # 打包
+      - name: 打包 🏗️
+        run: npm run build
+      # 测试
+      - name: 测试 💣
+        run: npm run test-unit
+      # 发布
+      - name: 发布 🚀
+        run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
