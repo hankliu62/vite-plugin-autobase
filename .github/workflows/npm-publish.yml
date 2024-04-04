@@ -40,7 +40,7 @@ jobs:
         run: npm run build
       # 测试
       - name: 测试 💣
-        run: npm run test-unit
+        run: npm run test
       # 发布
       - name: 发布 🚀
         run: npm publish
