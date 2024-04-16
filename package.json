@@ -14,7 +14,10 @@
     "import": "./dist/autobase.es.js",
     "require": "./dist/autobase.cjs.js"
   },
-  "repository": "https://github.com/hankliu62/autobase-webpack-plugin.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hankliu62/autobase-webpack-plugin.git"
+  },
   "author": "hank.liu",
   "license": "MIT",
   "scripts": {
